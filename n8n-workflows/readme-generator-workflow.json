@@ -1,0 +1,238 @@
+{
+  "name": "GitHub README Generator Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "readme-webhook",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 300],
+      "webhookId": "readme-generator-webhook"
+    },
+    {
+      "parameters": {
+        "functionCode": "// Extract repository URL from webhook data\nconst repoUrl = $input.first().json.repoUrl;\nconst config = $input.first().json.config || {};\n\n// Validate GitHub URL\nif (!repoUrl || !repoUrl.includes('github.com')) {\n  throw new Error('Invalid GitHub repository URL');\n}\n\n// Parse repository info\nconst match = repoUrl.match(/github\\.com\\/([^\\/]+)\\/([^\\/]+)/);\nif (!match) {\n  throw new Error('Could not parse repository URL');\n}\n\nconst [, owner, repo] = match;\n\nreturn {\n  repoUrl,\n  owner,\n  repo: repo.replace('.git', ''),\n  config: {\n    language: config.language || 'en',\n    style: config.style || 'modern',\n    includeBadges: config.includeBadges !== false,\n    includeTree: config.includeTree !== false\n  },\n  timestamp: new Date().toISOString()\n};"
+      },
+      "id": "process-input",
+      "name": "Process Input",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://api.github.com/repos/{{ $json.owner }}/{{ $json.repo }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "headers": {
+            "User-Agent": "n8n-readme-generator"
+          }
+        }
+      },
+      "id": "github-api",
+      "name": "GitHub API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [680, 300],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "github-token",
+          "name": "GitHub Token"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://api.github.com/repos/{{ $('process-input').first().json.owner }}/{{ $('process-input').first().json.repo }}/contents",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "headers": {
+            "User-Agent": "n8n-readme-generator"
+          }
+        }
+      },
+      "id": "github-contents",
+      "name": "GitHub Contents",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [900, 300],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "github-token",
+          "name": "GitHub Token"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "functionCode": "// Combine GitHub data and generate README\nconst repoData = $('github-api').first().json;\nconst contents = $('github-contents').first().json;\nconst config = $('process-input').first().json.config;\n\n// Analyze technologies\nconst technologies = [];\nconst fileNames = contents.map(f => f.name);\n\nif (fileNames.includes('package.json')) technologies.push('Node.js');\nif (fileNames.some(f => f.endsWith('.ts') || f.endsWith('.tsx'))) technologies.push('TypeScript');\nif (fileNames.some(f => f.endsWith('.py'))) technologies.push('Python');\nif (fileNames.some(f => f.endsWith('.rs'))) technologies.push('Rust');\nif (fileNames.includes('Dockerfile')) technologies.push('Docker');\n\n// Generate README content\nconst badges = [\n  '[![MIT License](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](https://choosealicense.com/licenses/mit/)',\n  '[![GitHub Stars](https://img.shields.io/github/stars/' + repoData.full_name + '.svg?style=for-the-badge)](https://github.com/' + repoData.full_name + '/stargazers)'\n];\n\nif (technologies.includes('TypeScript')) {\n  badges.unshift('[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)');\n}\nif (technologies.includes('Node.js')) {\n  badges.unshift('[![Node.js](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)');\n}\n\nconst readme = `# 🚀 ${repoData.name}\n\n${config.includeBadges ? badges.join('\\n') + '\\n\\n' : ''}\n> ${repoData.description || 'A GitHub repository'}\n\n## ✨ Features\n\n- ⚡ **Modern Technologies** - ${technologies.join(', ')}\n- 🎯 **Professional Development** - High-quality codebase\n- 📦 **Easy Setup** - Quick installation and configuration\n\n## 🛠️ Technology Stack\n\n| Category | Technologies |\n|----------|-------------|\n| **Main** | ${technologies.map(t => '![' + t + '](https://img.shields.io/badge/' + t.replace(' ', '_') + '-blue)').join(' ')} |\n| **License** | ${repoData.license?.name || 'Not specified'} |\n\n## 🚀 Installation\n\n\\`\\`\\`bash\n# Clone the repository\ngit clone ${repoData.clone_url}\ncd ${repoData.name}\n\n# Install dependencies\nnpm install\n\n# Start development server\nnpm run dev\n\\`\\`\\`\n\n## 🤝 Contributing\n\n1. 🍴 **Fork** the project\n2. 🌟 **Create** a feature branch\n3. 💾 **Commit** your changes\n4. 📤 **Push** to the branch\n5. 🔄 **Open** a Pull Request\n\n## 📄 License\n\nThis project is licensed under the ${repoData.license?.name || 'MIT'} License.\n\n---\n\n<div align=\"center\">\n\n**🌟 If you found this project helpful, please give it a star!**\n\n[![GitHub Stars](https://img.shields.io/github/stars/${repoData.full_name}.svg?style=social)](https://github.com/${repoData.full_name}/stargazers)\n\n</div>`;\n\nreturn {\n  repoData,\n  technologies,\n  readme,\n  config,\n  generatedAt: new Date().toISOString()\n};"
+      },
+      "id": "generate-readme",
+      "name": "Generate README",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [1120, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "notification-enabled",
+              "leftValue": "={{ $('process-input').first().json.config.notify }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equal"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "check-notification",
+      "name": "Check Notification",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1340, 300]
+    },
+    {
+      "parameters": {
+        "subject": "README.md Generated for {{ $('generate-readme').first().json.repoData.name }}",
+        "message": "=Hello!\n\nYour README.md file has been successfully generated for the repository: {{ $('generate-readme').first().json.repoData.full_name }}\n\n**Repository Details:**\n- Name: {{ $('generate-readme').first().json.repoData.name }}\n- Description: {{ $('generate-readme').first().json.repoData.description }}\n- Technologies: {{ $('generate-readme').first().json.technologies.join(', ') }}\n- Generated at: {{ $('generate-readme').first().json.generatedAt }}\n\nThe README.md content is attached to this email.\n\nBest regards,\nMCP README Generator",
+        "options": {
+          "attachments": "={{ [{\"name\": \"README.md\", \"content\": $('generate-readme').first().json.readme, \"type\": \"text/plain\"}] }}"
+        }
+      },
+      "id": "send-email",
+      "name": "Send Email Notification",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [1560, 200]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ {\n  \"success\": true,\n  \"message\": \"README.md generated successfully\",\n  \"repository\": $('generate-readme').first().json.repoData.name,\n  \"technologies\": $('generate-readme').first().json.technologies,\n  \"generatedAt\": $('generate-readme').first().json.generatedAt,\n  \"readmeLength\": $('generate-readme').first().json.readme.length\n} }}"
+      },
+      "id": "webhook-response",
+      "name": "Webhook Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1560, 400]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "webhook-trigger": {
+      "main": [
+        [
+          {
+            "node": "process-input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "process-input": {
+      "main": [
+        [
+          {
+            "node": "github-api",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "github-api": {
+      "main": [
+        [
+          {
+            "node": "github-contents",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "github-contents": {
+      "main": [
+        [
+          {
+            "node": "generate-readme",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "generate-readme": {
+      "main": [
+        [
+          {
+            "node": "check-notification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "check-notification": {
+      "main": [
+        [
+          {
+            "node": "send-email",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "webhook-response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "webhook-response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "1",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "readme-generator-instance"
+  },
+  "id": "readme-generator-workflow",
+  "tags": [
+    {
+      "createdAt": "2024-01-01T00:00:00.000Z",
+      "updatedAt": "2024-01-01T00:00:00.000Z",
+      "id": "github-automation",
+      "name": "GitHub Automation"
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "name": "mcp-readme-generator",
+  "private": true,
+  "version": "1.0.0",
+  "description": "MCP tool for generating professional README.md files from GitHub repositories",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "mcp": "node dist/mcp-server.js",
+    "build:mcp": "tsc src/mcp-server.ts --outDir dist --target ES2022 --module ESNext --moduleResolution bundler",
+    "mcp": "node dist/mcp-server.js",
+    "build:mcp": "tsc src/mcp-server.ts --outDir dist --target ES2022 --module ESNext --moduleResolution bundler",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "bin": {
+    "mcp-readme-generator": "./dist/mcp-server.js"
+  },
+  "bin": {
+    "mcp-readme-generator": "./dist/mcp-server.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^0.4.0",
+    "axios": "^1.10.0",
+    "cheerio": "^1.1.0",
+    "dotenv": "^16.6.1",
+    "lucide-react": "^0.344.0",
+    "openai": "^4.104.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.9.1",
+    "@types/node": "^24.0.13",
+    "@types/react": "^18.3.5",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "autoprefixer": "^10.4.18",
+    "eslint": "^9.9.1",
+    "eslint-plugin-react-hooks": "^5.1.0-rc.0",
+    "eslint-plugin-react-refresh": "^0.4.11",
+    "globals": "^15.9.0",
+    "postcss": "^8.4.35",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.5.3",
+    "typescript-eslint": "^8.3.0",
+    "vite": "^5.4.2"
+  }
+}

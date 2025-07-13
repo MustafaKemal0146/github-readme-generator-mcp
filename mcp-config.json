@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "readme-generator": {
+      "command": "node",
+      "args": ["dist/mcp-server.js"],
+      "env": {
+        "GITHUB_TOKEN": "${GITHUB_TOKEN}",
+        "OPENAI_API_KEY": "${OPENAI_API_KEY}"
+      }
+    }
+  }
+}
