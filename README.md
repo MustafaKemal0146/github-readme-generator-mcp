@@ -4,11 +4,21 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org/)
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](https://choosealicense.com/licenses/mit/)
-[![GitHub Stars](https://img.shields.io/github/stars/MustafaKemal0146/github-readme-generator-mcp.svg?style=for-the-badge)](https://github.com/MustafaKemal0146/github-readme-generator-mcp/stargazers)
+[![GitHub Stars](https://img.shields.io/github/stars/yourusername/mcp-readme-generator.svg?style=for-the-badge)](https://github.com/yourusername/mcp-readme-generator/stargazers)
 
 > 🚀 **AI destekli GitHub repository analizi ile otomatik README.md oluşturucu**
 >
 > Model Context Protocol (MCP) standardında geliştirilmiş, akıllı analiz yapan hibrit tool
+
+## 📸 Proje Önizlemesi
+
+<div align="center">
+
+![MCP README Generator - Web Arayüzü](./img/image.png)
+
+*Modern web arayüzü ile GitHub repository analizi ve README.md oluşturma*
+
+</div>
 
 ## ✨ Özellikler
 
