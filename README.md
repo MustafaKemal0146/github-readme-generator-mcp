@@ -412,9 +412,9 @@ Bu proje [MIT Lisansı](LICENSE) altında lisanslanmıştır.
 
 ## 📞 İletişim
 
-- 🐦 Twitter: [@yourusername](https://twitter.com/yourusername)
-- 📧 Email: your.email@domain.com
-- 💼 LinkedIn: [Your Name](https://linkedin.com/in/yourname)
+- 🛜 WebSite: https://mustafakemalcingil.site/
+- 📧 Email: ismustafakemal0146@gmail.com
+- 💼 LinkedIn: [mustafakemal0146](https://linkedin.com/in/mustafakemal0146)
 
 ---
 
@@ -422,8 +422,16 @@ Bu proje [MIT Lisansı](LICENSE) altında lisanslanmıştır.
 
 **🌟 Bu projeyi beğendiyseniz yıldız vermeyi unutmayın!**
 
-[![GitHub Stars](https://img.shields.io/github/stars/yourusername/mcp-readme-generator.svg?style=social)](https://github.com/yourusername/mcp-readme-generator/stargazers)
-[![GitHub Forks](https://img.shields.io/github/forks/yourusername/mcp-readme-generator.svg?style=social)](https://github.com/yourusername/mcp-readme-generator/network/members)
-[![GitHub Watchers](https://img.shields.io/github/watchers/yourusername/mcp-readme-generator.svg?style=social)](https://github.com/yourusername/mcp-readme-generator/watchers)
+[![GitHub Stars](https://img.shields.io/github/stars/MustafaKemal0146/github-readme-generator-mcp.svg?style=social)](https://github.com/MustafaKemal0146/github-readme-generator-mcp/stargazers)
+[![GitHub Forks](https://img.shields.io/github/forks/MustafaKemal0146/github-readme-generator-mcp.svg?style=social)](https://github.com/MustafaKemal0146/github-readme-generator-mcp/network/members)
+[![GitHub Watchers](https://img.shields.io/github/watchers/MustafaKemal0146/github-readme-generator-mcp.svg?style=social)](https://github.com/MustafaKemal0146/github-readme-generator-mcp/watchers)
+
+
+</div>
+
+---
+
+<div align="center">
+✨ Bu README.md, Model Context Protocol (MCP) ile güçlendirilmiş yapay zekanın sihirli dokunuşuyla otomatik olarak oluşturuldu. ✨
 
 </div>
