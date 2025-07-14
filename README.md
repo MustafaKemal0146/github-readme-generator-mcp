@@ -412,9 +412,10 @@ Bu proje [MIT Lisansı](LICENSE) altında lisanslanmıştır.
 
 ## 📞 İletişim
 
-- 🛜 WebSite: https://mustafakemalcingil.site/
-- 📧 Email: ismustafakemal0146@gmail.com
-- 💼 LinkedIn: [mustafakemal0146](https://linkedin.com/in/mustafakemal0146)
+- 🛜 **WebSite**: https://mustafakemalcingil.site/
+- 📧 **Email**: ismustafakemal0146@gmail.com
+- 💼 **LinkedIn**: [mustafakemal0146](https://linkedin.com/in/mustafakemal0146)
+- 🐙 **GitHub**: [@mustafakemal0146](https://github.com/mustafakemal0146)
 
 ---
 
