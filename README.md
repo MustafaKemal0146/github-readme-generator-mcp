@@ -347,7 +347,7 @@ Projeye katkıda bulunmak için:
 
 ```bash
 # Repository'yi fork edin ve klonlayın
-git clone https://github.com/yourusername/mcp-readme-generator.git
+git clone https://github.com/MustafaKemal0146/github-readme-generator-mcp.git
 
 # Bağımlılıkları yükleyin
 npm install
